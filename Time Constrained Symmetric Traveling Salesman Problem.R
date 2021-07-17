@@ -10,7 +10,7 @@ library(ROI)
 library(ROI.plugin.symphony)
 library(ompr)
 library(ompr.roi)
-library(ggplot2)
+
 
 #Set t0
 t0 <- 0
@@ -76,6 +76,7 @@ print(paste("Model status is:", Model$status))
 ##Objective Function
 print(paste("Objective value:", objective_value(Model)))
 
+#x variables 
 for (a in 1:(n+1)) {
     tmp_x <- get_solution(Model, x[i]) %>%
       filter(variable == "x", i == a) %>%
@@ -86,6 +87,18 @@ for (a in 1:(n+1)) {
     }
 }
 
-
+#y variables
+for (a in 1:(n+1)) {
+  for (b in 1:(n+1)) {
+    if(a!=b){
+    tmp <- get_solution(Model, y[i,j]) %>%
+      filter(variable == "y", i == a , j == b) %>%
+      select(value)
+    if (tmp != 0) {
+      print(paste("--->y[", a,",",b, "] =", tmp))
+    }
+    }
+  }
+}
 
 
